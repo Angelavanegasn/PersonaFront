@@ -6,6 +6,7 @@ import { PaisService } from './services/Pais/pais.service';
 import { PersonaService } from './services/Personas/persona.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { error } from 'console';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit {
   personaForm!: FormGroup;
   paises: any;
   estados: any;
+  personas:any;
 
   title = 'ProyectoAngularPersonal';
 
@@ -45,41 +47,49 @@ export class AppComponent implements OnInit {
 
     },
       error => { console.error(error) }
-    )
+    );
 
+    this.personaService.getAllPersonas().subscribe(resp => {
+      this.personas = resp;
+    },
+    error =>{console.error(error) 
+
+    }
+  );
+    
+    
+    this.personaForm.get('pais').valueChanges.subscribe(value =>{
+      this.estadosService.getAllEstadosByPais(value.id).subscribe(resp =>{
+        this.estados = resp;
+        
+      },
+      error => {console.error(error)}
+    );
+  })
+
+  
 
   }
   guardar(): void {
-
+    this.personaService.savePersona(this.personaForm.value).subscribe(resp => {
+      this.personaForm.reset();
+    },
+      error => { console.error(error) }
+    )
   }
 
-    cargarEstadosPorPaisesId(event) {
-      console.log(event.target.value);
-    this.estadosService.getAllEstadosByPais(event.target.value ).subscribe(resp => {
-      this.estados = resp;
-    },
-      error => {console.error(error)}
+
+cargarEstadosPorPaisesId(event) {
+  console.log(event.target.value);
+  this.estadosService.getAllEstadosByPais(event.target.value).subscribe(resp => {
+    this.estados = resp;
+  },
+    error => { console.error(error) }
   );
 
 }
-  
-/*
-cargarEstadosPorPaisesId(event: Event): void {
-  const selectElement = event.target as HTMLSelectElement;
-  const idPais = Number(selectElement.value); 
 
-  this.estadosService.getAllEstadoByPais(idPais).subscribe(
-    resp => {
-      this.estados = resp;
-    },
-    error => {
-      console.error(error);
-    }
-  );
-}
-*/
     
-  
    
   }
 

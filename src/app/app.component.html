@@ -16,14 +16,14 @@
       </div>
       <div class="form-group">
         <label style="display: block;">pais</label>
-        <select name="pais" id="pais" formControlName="pais" class="form-control" (change)="cargarEstadosPorPaisesId($event)">
-        <option [value]="item.id" *ngFor="let item of paises">{{item.nombre}}</option>
+        <select name="pais" id="pais" formControlName="pais" class="form-control" >
+        <option [ngValue]="item" *ngFor="let item of paises">{{item.nombre}}</option>
         </select>
       </div>
       <div class="form-group">
         <label style="display: block;">estado o region</label>
         <select name="estado" id="estado" formControlName="estado" class="form-control">
-        <option value="item.id" *ngFor="let item of estados">{{item.nombre}}</option>
+        <option [ngValue]="item" *ngFor="let item of estados">{{item.nombre}}</option>
         </select>
       </div>
       
